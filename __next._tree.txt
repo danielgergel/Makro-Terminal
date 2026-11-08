@@ -5,4 +5,4 @@
 :HL["/Makro-Terminal/_next/static/media/c0680f1bdb3a2e90-s.p.1gsd1jahc5dg_.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Makro-Terminal/_next/static/media/d6c1ff7e86974212-s.p.40sczeszzbjw1.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 1:[["children",{"s":"__PAGE__","h":160}]]
-0:{"b":"ubZ-zua4vH_l2N2RmAXC2","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"vT3TDgBk1vA5wJBPzLVia","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
