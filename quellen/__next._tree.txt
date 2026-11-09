@@ -1,4 +1,4 @@
-:HL["/Makro-Terminal/_next/static/chunks/3z3d4_duxymo1.css","style"]
+:HL["/Makro-Terminal/_next/static/chunks/1v1r0kh9vboj9.css","style"]
 :HL["/Makro-Terminal/_next/static/media/75cb990346c55dc4-s.p.40bho2kviej2o.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Makro-Terminal/_next/static/media/916cd8a3bde3edf8-s.p.0oace-s_gkfks.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/Makro-Terminal/_next/static/media/a6fd56cd89ea0e72-s.p.1hij5ex6k3v9q.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
@@ -6,4 +6,4 @@
 :HL["/Makro-Terminal/_next/static/media/d6c1ff7e86974212-s.p.40sczeszzbjw1.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":"quellen","h":96,"c":"$Q2"}]]
-0:{"b":"JuOlmqdYExtdrdF-6rajS","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"kTaZAxzxw-ok41ZW5ZZUV","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
