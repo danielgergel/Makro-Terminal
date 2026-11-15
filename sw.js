@@ -1,19 +1,39 @@
-const CACHE = "makro-terminal-shell-v1";
+/* Makro-Terminal Service Worker: netzwerk-zuerst, löscht beim Aktivieren alle alten Caches. */
+const CACHE = "makro-terminal-v2";
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(["./", "./config.js", "./manifest.webmanifest"])));
+self.addEventListener("install", () => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((k) => caches.delete(k)));
+      await self.clients.claim();
+    })(),
+  );
 });
 
 self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
+  const req = event.request;
+  if (req.method !== "GET") return;
+  const url = new URL(req.url);
   if (url.origin !== self.location.origin || url.pathname.includes("/api/")) return;
   event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const copy = response.clone();
-        caches.open(CACHE).then((cache) => cache.put(event.request, copy)).catch(() => undefined);
-        return response;
-      })
-      .catch(() => caches.match(event.request)),
+    (async () => {
+      try {
+        const res = await fetch(req, { cache: "no-store" });
+        if (res && res.ok) {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => undefined);
+        }
+        return res;
+      } catch (e) {
+        const hit = await caches.match(req);
+        if (hit) return hit;
+        throw e;
+      }
+    })(),
   );
 });

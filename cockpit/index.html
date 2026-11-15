@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c120e">
+<title>Trading-Cockpit</title>
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../favicon.ico">
+<link rel="apple-touch-icon" href="../icon-192.png">
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <h1 class="brand">Trading-Cockpit</h1>
+    <nav class="nav" aria-label="Seiten">
+      <a href="../" data-nav>Terminal</a>
+      <a href="./" aria-current="page" data-nav>Cockpit</a>
+    </nav>
+  </header>
+  <div class="statusbar" aria-label="Aktualisierung">
+    <span id="stand" class="num">Lade Daten …</span>
+    <span id="proxy" class="grow"></span>
+    <button id="refresh" class="btn small" type="button">Jetzt aktualisieren</button>
+  </div>
+  <div id="banner" class="banner" role="status"></div>
+
+  <div id="cockbar" class="cockbar" style="margin-bottom:14px"></div>
+
+  <main class="grid three">
+    <section class="card span2" aria-labelledby="h-ampel">
+      <header><h2 id="h-ampel">Darf ich gerade handeln?</h2></header>
+      <div id="ampel-body"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-sess">
+      <header><h2 id="h-sess">Sitzungsuhr</h2></header>
+      <div id="sess-body"></div>
+    </section>
+
+    <section class="card span2" aria-labelledby="h-check">
+      <header><h2 id="h-check">Vor jedem Trade: sechs Fragen</h2><button id="check-reset" class="btn small" type="button">Zurücksetzen</button></header>
+      <div id="check-list"></div>
+      <div id="check-result" class="result" aria-live="polite"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-regeln">
+      <header><h2 id="h-regeln">Tagesregeln</h2></header>
+      <p class="small muted">Maximal 2 Trades, Stopp nach 2 Verlusten. Setzt sich je Handelstag (New Yorker Datum) zurück.</p>
+      <div class="field"><label for="amt">Betrag in Dollar (optional, für das Tagesverlustlimit)</label>
+        <input id="amt" type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 150"></div>
+      <div class="row">
+        <button id="btn-win" class="btn long" type="button">Gewinn</button>
+        <button id="btn-loss" class="btn short" type="button">Verlust</button>
+        <button id="btn-undo" class="btn" type="button">Rückgängig</button>
+      </div>
+      <div id="regeln-body" style="margin-top:10px"></div>
+      <div class="row" style="margin-top:8px"><button id="btn-reset-day" class="btn small danger" type="button">Tag zurücksetzen</button></div>
+      <p class="small muted">Nach „Gewinn“ oder „Verlust“ werden die sechs Fragen automatisch zurückgesetzt.</p>
+    </section>
+
+    <section class="card" aria-labelledby="h-lage">
+      <header><h2 id="h-lage">Lage zum Vortag</h2></header>
+      <div class="field"><label for="nq">NQ-Kurs (zum Umrechnen in Punkte, wird gespeichert)</label>
+        <input id="nq" type="text" inputmode="decimal" autocomplete="off" placeholder="z. B. 21.350"></div>
+      <div id="lage-body"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-erw">
+      <header><h2 id="h-erw">Erwartete Tagesbewegung</h2></header>
+      <div id="erw-body"></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-calc">
+      <header><h2 id="h-calc">Risikorechner</h2></header>
+      <div class="fields">
+        <div class="field"><label for="inst">Instrument</label>
+          <select id="inst"><option value="NQ">NQ (20 $ je Punkt)</option><option value="MNQ">MNQ (2 $ je Punkt)</option></select></div>
+        <div class="field"><label for="stop">Stop in Punkten</label><input id="stop" type="text" inputmode="decimal" autocomplete="off"></div>
+        <div class="field"><label for="ctr">Kontrakte</label><input id="ctr" type="text" inputmode="decimal" autocomplete="off"></div>
+      </div>
+      <p id="risk-out" class="num" style="font-weight:600"></p>
+      <div class="field" style="margin-top:12px"><label for="maxrisk">Maximales Risiko in Dollar</label><input id="maxrisk" type="text" inputmode="decimal" autocomplete="off"></div>
+      <p id="ctr-out" class="num" style="font-weight:600"></p>
+      <div class="field" style="margin-top:12px"><label for="target">Ziel in Punkten</label><input id="target" type="text" inputmode="decimal" autocomplete="off"></div>
+      <p id="rr-out" class="num" style="font-weight:600" aria-live="polite"></p>
+    </section>
+
+    <section class="card span2" aria-labelledby="h-quote">
+      <header><h2 id="h-quote">Merksatz des Tages</h2><span id="quote-n" class="small muted"></span></header>
+      <p id="quote" class="quote"></p>
+      <div class="row"><button id="q-prev" class="btn" type="button">Zurück</button><button id="q-next" class="btn" type="button">Nächster Satz</button></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-set">
+      <details>
+        <summary style="min-height:44px;display:flex;align-items:center;cursor:pointer"><h2 id="h-set" style="display:inline">Einstellungen Sperren</h2></summary>
+        <div class="fields" style="margin-top:10px">
+          <div class="field"><label for="s-pre">Minuten vor US-Eröffnung (9:30 New York)</label><input id="s-pre" type="text" inputmode="numeric"></div>
+          <div class="field"><label for="s-post">Minuten nach US-Eröffnung</label><input id="s-post" type="text" inputmode="numeric"></div>
+          <div class="field"><label for="s-evb">Minuten vor Termin</label><input id="s-evb" type="text" inputmode="numeric"></div>
+          <div class="field"><label for="s-eva">Minuten nach Termin</label><input id="s-eva" type="text" inputmode="numeric"></div>
+          <div class="field"><label for="s-stars">Termine ab Sternen</label><input id="s-stars" type="text" inputmode="numeric"></div>
+          <div class="field"><label for="s-loss">Tagesverlustlimit in Dollar (leer = aus)</label><input id="s-loss" type="text" inputmode="decimal"></div>
+        </div>
+      </details>
+    </section>
+  </main>
+  <footer class="foot"><p>Hilfsmittel zur Disziplin, kein Anlagerat. Bias und Level beruhen auf dem Proxy QQQ, nicht auf NQ.</p></footer>
+</div>
+<script src="../config.js"></script>
+<script src="../assets/masterliste.js"></script>
+<script src="../assets/common.js"></script>
+<script src="../assets/cockpit.js"></script>
+<script>if ("serviceWorker" in navigator) { navigator.serviceWorker.register("../sw.js", { scope: "../" }).catch(function () {}); }</script>
+</body>
+</html>

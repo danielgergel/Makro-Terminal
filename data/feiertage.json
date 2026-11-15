@@ -1,0 +1,24 @@
+{
+  "generated": "2026-11-15",
+  "sources": [
+    { "name": "NYSE Holidays & Trading Hours (2026, 2027, 2028)", "url": "https://www.nyse.com/trade/hours-calendars" },
+    { "name": "CME Group Holiday and Trading Hours (Globex-Feiertagspläne)", "url": "https://www.cmegroup.com/trading-hours.html" }
+  ],
+  "holidays": [
+    { "date": "2026-11-26", "name": "Thanksgiving", "status": "geschlossen", "note": "NYSE geschlossen. CME hat für 26.–28.11.2026 einen eigenen Globex-Feiertagsplan veröffentlicht; Handelszeiten dort prüfen, Liquidität im NQ sehr dünn." },
+    { "date": "2026-11-27", "name": "Tag nach Thanksgiving", "status": "verkuerzt", "note": "NYSE schließt um 13:00 ET (19:00 deutsche Zeit). Dünne Liquidität im NQ, besonders am Nachmittag; Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2026-12-24", "name": "Heiligabend", "status": "verkuerzt", "note": "NYSE schließt um 13:00 ET (19:00 deutsche Zeit). Dünne Liquidität im NQ; CME hat für 24.–26.12.2026 einen eigenen Globex-Feiertagsplan veröffentlicht." },
+    { "date": "2026-12-25", "name": "Weihnachtstag", "status": "geschlossen", "note": "NYSE geschlossen. Sehr dünne Liquidität im NQ; Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-01-01", "name": "Neujahrstag", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ; CME hat für 31.12.2026–1.1.2027 einen eigenen Globex-Feiertagsplan veröffentlicht." },
+    { "date": "2027-01-18", "name": "Martin Luther King Jr. Day", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-02-15", "name": "Presidents' Day (Washington's Birthday)", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-03-26", "name": "Karfreitag (Good Friday)", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-05-31", "name": "Memorial Day", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-06-18", "name": "Juneteenth (Ersatztag, da 19.6. ein Samstag ist)", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-07-05", "name": "Independence Day (Ersatztag, da 4.7. ein Sonntag ist)", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-09-06", "name": "Labor Day", "status": "geschlossen", "note": "NYSE geschlossen. Dünne Liquidität im NQ, Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-11-25", "name": "Thanksgiving", "status": "geschlossen", "note": "NYSE geschlossen. Sehr dünne Liquidität im NQ; Globex-Zeiten laut CME-Feiertagsplan prüfen." },
+    { "date": "2027-11-26", "name": "Tag nach Thanksgiving", "status": "verkuerzt", "note": "NYSE schließt um 13:00 ET (19:00 deutsche Zeit). Dünne Liquidität im NQ, besonders am Nachmittag." },
+    { "date": "2027-12-24", "name": "Weihnachten (Ersatztag, da 25.12. ein Samstag ist)", "status": "geschlossen", "note": "NYSE geschlossen. Sehr dünne Liquidität im NQ; Globex-Zeiten laut CME-Feiertagsplan prüfen." }
+  ]
+}

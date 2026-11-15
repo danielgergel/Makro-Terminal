@@ -1,0 +1,64 @@
+{
+  "version": 2,
+  "generatedAt": "2026-11-13T15:42:10Z",
+  "market": {
+    "proxy": "QQQ",
+    "session": "regulaer",
+    "extendedHours": false,
+    "lastPrice": 612.48,
+    "lastTime": "2026-11-13T15:42:00Z",
+    "ageSeconds": 10,
+    "stale": false
+  },
+  "bias": {
+    "label": "Long",
+    "score": 3,
+    "confidence": "mittel",
+    "factors": [
+      { "key": "vortag", "name": "Vortag", "side": "Long", "detail": "Schluss im oberen Drittel der Tagesspanne" },
+      { "key": "gap", "name": "Eröffnungslücke", "side": "Neutral", "detail": "Lücke nur +0,10 %, kein Signal" },
+      { "key": "vwap", "name": "VWAP", "side": "Long", "detail": "Kurs hält über dem VWAP (+0,13 %)" },
+      { "key": "level", "name": "Vortageshoch", "side": "Long", "detail": "Über dem Vortageshoch akzeptiert" },
+      { "key": "risk", "name": "Risikostimmung", "side": "Long", "detail": "VIX fällt, Renditen leicht tiefer" }
+    ],
+    "summary": "Käufer kontrollieren den Tag, solange der Kurs über dem VWAP und dem Vortageshoch bleibt."
+  },
+  "regime": {
+    "label": "Imbalance",
+    "direction": "Long",
+    "text": "Der Kurs läuft seit der Eröffnung überwiegend in eine Richtung, Rückläufer sind flach.",
+    "efficiency": 0.62,
+    "timeframe": "15 Minuten",
+    "detail": "Effizienz 62 % über die letzten 12 Kerzen, höhere Tiefs.",
+    "since": "2026-11-13T14:35:00Z"
+  },
+  "levels": {
+    "prevHigh": 611.2,
+    "prevLow": 604.1,
+    "prevClose": 610.3,
+    "todayOpen": 610.9,
+    "todayHigh": 612.8,
+    "todayLow": 610.4,
+    "vwap": 611.7,
+    "position": "ueber_vortageshoch",
+    "gapPct": 0.1,
+    "atrPct14": 1.35,
+    "rangeTodayPct": 0.39,
+    "distPrevHighPct": 0.21,
+    "distPrevLowPct": 1.39,
+    "distVwapPct": 0.13
+  },
+  "risk": {
+    "score": 66,
+    "label": "Risk-On",
+    "vix": { "value": 15.8, "date": "2026-11-12", "changePct": -2.1 },
+    "expectedMovePct": 1.0,
+    "components": [
+      { "name": "VIX", "changePct": -2.1, "side": "Risk-On" },
+      { "name": "US-Rendite 10 Jahre", "changePct": -0.8, "side": "Risk-On" },
+      { "name": "US-Dollar", "changePct": 0.1, "side": "Neutral" },
+      { "name": "Öl", "changePct": 0.9, "side": "Neutral" }
+    ]
+  },
+  "diagnostics": { "errors": [] }
+}

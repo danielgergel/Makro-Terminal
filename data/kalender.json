@@ -1,0 +1,1542 @@
+{
+ "generated": "2026-11-15",
+ "validUntil": "2026-12-17",
+ "validUntilNote": "Konservativ: bis zu diesem Datum sind ALLE Reihen abgedeckt. Die meisten Reihen reichen bis Ende 2027 (siehe seriesUntil); ISM, Philly Fed und Conference Board sind offiziell nur bis Dezember 2026 veröffentlicht.",
+ "seriesUntil": {
+  "cpi": "2027-12-10",
+  "ppi": "2027-12-15",
+  "arbeitsmarkt": "2027-12-03",
+  "jolts": "2027-12-01",
+  "bip": "2027-12-22",
+  "pce": "2027-11-24",
+  "einzelhandel": "2027-12-15",
+  "neubau": "2027-12-22",
+  "fomc": "2027-11-17",
+  "claims": "2027-12-30",
+  "adp": "2027-12-01",
+  "ism_industrie": "2026-12-01",
+  "ism_dienste": "2026-12-03",
+  "philly": "2026-12-17",
+  "verbrauchervertrauen": "2026-12-22"
+ },
+ "sources": [
+  {
+   "name": "BLS Release Calendar (CPI, Employment Situation, PPI, JOLTS)",
+   "url": "https://www.bls.gov/schedule/news_release/"
+  },
+  {
+   "name": "BEA Release Schedule (GDP, Personal Income and Outlays)",
+   "url": "https://www.bea.gov/news/schedule"
+  },
+  {
+   "name": "BEA Online-Kalender (ICS)",
+   "url": "https://www.bea.gov/news/schedule/ics/online-calendar-subscription.ics"
+  },
+  {
+   "name": "Federal Reserve FOMC Calendars",
+   "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
+  },
+  {
+   "name": "Census Bureau Economic Indicator Calendar 2026",
+   "url": "https://www.census.gov/economic-indicators/calendar-listview-2026.html"
+  },
+  {
+   "name": "Census Bureau Economic Indicator Calendar 2027",
+   "url": "https://www.census.gov/economic-indicators/calendar-listview.html"
+  },
+  {
+   "name": "ISM Report Release Date Calendar",
+   "url": "https://www.ismworld.org/supply-management-news-and-reports/reports/rob-report-calendar/"
+  },
+  {
+   "name": "Conference Board Consumer Confidence (Economic Indicator Calendar)",
+   "url": "https://www.conference-board.org/topics/consumer-confidence"
+  },
+  {
+   "name": "Philadelphia Fed Manufacturing Business Outlook Survey",
+   "url": "https://www.philadelphiafed.org/surveys-and-data/regional-economic-analysis/manufacturing-business-outlook-survey"
+  },
+  {
+   "name": "ADP National Employment Report (Calendar)",
+   "url": "https://adpemploymentreport.com/"
+  },
+  {
+   "name": "DOL/ETA UI Weekly Claims Publication Schedule",
+   "url": "https://oui.doleta.gov/unemploy/claims_arch.asp"
+  }
+ ],
+ "events": [
+  {
+   "date": "2026-11-02",
+   "timeET": "10:00",
+   "id": "ism_industrie",
+   "title": "ISM Manufacturing PMI",
+   "source": "ISM: Release Dates for the ISM Manufacturing and Services PMI Reports"
+  },
+  {
+   "date": "2026-11-04",
+   "timeET": "10:00",
+   "id": "ism_dienste",
+   "title": "ISM Services PMI",
+   "source": "ISM: Release Dates for the ISM Manufacturing and Services PMI Reports"
+  },
+  {
+   "date": "2026-11-05",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-11-06",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2026-11-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2026-11-12",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-11-13",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2026-11-17",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (October 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-11-19",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-11-19",
+   "timeET": "08:30",
+   "id": "philly",
+   "title": "Philly Fed Manufacturing Index (Manufacturing Business Outlook Survey)",
+   "source": "Philadelphia Fed: Release Calendar MBOS"
+  },
+  {
+   "date": "2026-11-24",
+   "timeET": "10:00",
+   "id": "verbrauchervertrauen",
+   "title": "CB Verbrauchervertrauen (Consumer Confidence)",
+   "source": "Conference Board: Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-11-25",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q3 2026 – Zweite Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2026-11-25",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe (vorgezogen wegen Feiertag)",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Ausnahmeliste)"
+  },
+  {
+   "date": "2026-11-25",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (October 2026)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2026-11-25",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (October 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-12-01",
+   "timeET": "10:00",
+   "id": "ism_industrie",
+   "title": "ISM Manufacturing PMI",
+   "source": "ISM: Release Dates for the ISM Manufacturing and Services PMI Reports"
+  },
+  {
+   "date": "2026-12-01",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2026-12-02",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2026-12-03",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-12-03",
+   "timeET": "10:00",
+   "id": "ism_dienste",
+   "title": "ISM Services PMI",
+   "source": "ISM: Release Dates for the ISM Manufacturing and Services PMI Reports"
+  },
+  {
+   "date": "2026-12-04",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2026-12-09",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid (mit Wirtschaftsprojektionen / Dot Plot)",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2026-12-10",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-12-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2026-12-15",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2026-12-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (November 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-12-17",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-12-17",
+   "timeET": "08:30",
+   "id": "philly",
+   "title": "Philly Fed Manufacturing Index (Manufacturing Business Outlook Survey)",
+   "source": "Philadelphia Fed: Release Calendar MBOS"
+  },
+  {
+   "date": "2026-12-22",
+   "timeET": "10:00",
+   "id": "verbrauchervertrauen",
+   "title": "CB Verbrauchervertrauen (Consumer Confidence)",
+   "source": "Conference Board: Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-12-23",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q3 2026 – Dritte Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2026-12-23",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (November 2026)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2026-12-23",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (November 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2026-12-24",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2026-12-31",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-01-05",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-01-06",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-01-07",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-01-08",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-01-13",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-01-14",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-01-14",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-01-15",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (December 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-01-21",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-01-27",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (December 2026)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-01-27",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-01-28",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q4 2026 – Erste Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-01-28",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-01-28",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (December 2026)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-02-02",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-02-03",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-02-04",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-02-05",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-02-11",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-02-11",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-02-12",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-02-17",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (January 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-02-18",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-02-24",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (January 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-02-25",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q4 2026 – Zweite Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-02-25",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-02-25",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (January 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-03-03",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-03-04",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-03-05",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-03-09",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-03-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-03-11",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-03-12",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-03-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (February 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-03-17",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-03-18",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-03-23",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (February 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-03-25",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-03-30",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-03-31",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-03-31",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q4 2026 – Dritte Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-03-31",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (February 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-04-01",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-04-02",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-04-08",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-04-13",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-04-14",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-04-15",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-04-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (March 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-04-22",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-04-23",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (March 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-04-28",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-04-29",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q1 2027 – Erste Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-04-29",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-04-29",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (March 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-05-04",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-05-05",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-05-06",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-05-07",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-05-12",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-05-13",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-05-13",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-05-14",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (April 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-05-20",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-05-25",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (April 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-05-27",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q1 2027 – Zweite Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-05-27",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-05-27",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (April 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-06-02",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-06-03",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-06-03",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-06-04",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-06-09",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-06-10",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-06-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-06-11",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-06-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (May 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-06-17",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-06-24",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-06-24",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (May 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-06-25",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q1 2027 – Dritte Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-06-25",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (May 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-06-29",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-06-30",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-07-01",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-07-02",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-07-08",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-07-14",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-07-15",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-07-15",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-07-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (June 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-07-22",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-07-26",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (June 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-07-28",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-07-29",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q2 2027 – Erste Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-07-29",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-07-29",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (June 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-08-03",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-08-04",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-08-05",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-08-06",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-08-10",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-08-11",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-08-12",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-08-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (July 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-08-19",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-08-24",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (July 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-08-25",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q2 2027 – Zweite Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-08-25",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (July 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-08-26",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-08-31",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-09-01",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-09-02",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-09-03",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-09-09",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-09-10",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-09-14",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-09-15",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-09-16",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-09-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (August 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-09-23",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-09-24",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (August 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-09-30",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q2 2027 – Dritte Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-09-30",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-09-30",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (August 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-10-05",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-10-06",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-10-07",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-10-08",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-10-14",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-10-14",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-10-15",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (September 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-10-15",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-10-21",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-10-26",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (September 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-10-27",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-10-28",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q3 2027 – Erste Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-10-28",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-10-28",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (September 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-11-02",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-11-03",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-11-04",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-11-05",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-11-10",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe (vorgezogen wegen Feiertag)",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Ausnahmeliste)"
+  },
+  {
+   "date": "2027-11-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-11-12",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-11-16",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (October 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-11-17",
+   "timeET": "14:00",
+   "id": "fomc",
+   "title": "FOMC-Zinsentscheid",
+   "source": "Federal Reserve: FOMC Calendars (Sitzungstermine, Stand 12.11.2026, laut Fed tentativ)"
+  },
+  {
+   "date": "2027-11-18",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-11-24",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q3 2027 – Zweite Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-11-24",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe (vorgezogen wegen Feiertag)",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Ausnahmeliste)"
+  },
+  {
+   "date": "2027-11-24",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (October 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-11-24",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (October 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-12-01",
+   "timeET": "08:15",
+   "id": "adp",
+   "title": "ADP National Employment Report",
+   "source": "ADP Research: NER-Veröffentlichungskalender"
+  },
+  {
+   "date": "2027-12-01",
+   "timeET": "10:00",
+   "id": "jolts",
+   "title": "JOLTS (offene Stellen)",
+   "source": "BLS Release Calendar: JOLTS"
+  },
+  {
+   "date": "2027-12-02",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-12-03",
+   "timeET": "08:30",
+   "id": "arbeitsmarkt",
+   "title": "Arbeitsmarktbericht (NFP, Löhne, Arbeitslosenquote)",
+   "source": "BLS Release Calendar: Employment Situation"
+  },
+  {
+   "date": "2027-12-09",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-12-10",
+   "timeET": "08:30",
+   "id": "cpi",
+   "title": "CPI (Verbraucherpreise)",
+   "source": "BLS Release Calendar: Consumer Price Index"
+  },
+  {
+   "date": "2027-12-15",
+   "timeET": "08:30",
+   "id": "einzelhandel",
+   "title": "Einzelhandelsumsätze (November 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-12-15",
+   "timeET": "08:30",
+   "id": "ppi",
+   "title": "PPI (Erzeugerpreise)",
+   "source": "BLS Release Calendar: Producer Price Index"
+  },
+  {
+   "date": "2027-12-16",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-12-22",
+   "timeET": "08:30",
+   "id": "bip",
+   "title": "BIP (GDP) Q3 2027 – Dritte Schätzung",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-12-22",
+   "timeET": "08:30",
+   "id": "pce",
+   "title": "PCE / Personal Income and Outlays (November 2027)",
+   "source": "BEA Release Schedule (ICS)"
+  },
+  {
+   "date": "2027-12-22",
+   "timeET": "10:00",
+   "id": "neubau",
+   "title": "Verkäufe neuer Häuser (November 2027)",
+   "source": "Census Economic Indicator Calendar"
+  },
+  {
+   "date": "2027-12-23",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  },
+  {
+   "date": "2027-12-30",
+   "timeET": "08:30",
+   "id": "claims",
+   "title": "Erstanträge Arbeitslosenhilfe",
+   "source": "DOL/ETA: UI Weekly Claims Publication Schedule (Regel: donnerstags 08:30 ET)",
+   "regel": true
+  }
+ ]
+}
