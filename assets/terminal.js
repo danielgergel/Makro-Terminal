@@ -35,7 +35,9 @@
       box.appendChild(h("p", { class: "banner warn" }, "Kalender abgelaufen (gültig bis " + cal.meta.validUntil + "). Termine können fehlen."));
     }
     var wd = MT.weekday(today);
-    var monday = MT.addDays(today, -((wd + 6) % 7) + 7 * weekOffset);
+    // Am Wochenende zählt schon die kommende Handelswoche als "diese Woche".
+    var wochenende = wd === 6 || wd === 0;
+    var monday = MT.addDays(today, -((wd + 6) % 7) + 7 * (weekOffset + (wochenende ? 1 : 0)));
     var days = [];
     for (var i = 0; i < 7; i++) days.push(MT.addDays(monday, i));
     $("kal-range").textContent = MT.dateDE(days[0], true).replace(/^\S+\s/, "") + " – " + MT.dateDE(days[6], true).replace(/^\S+\s/, "");
