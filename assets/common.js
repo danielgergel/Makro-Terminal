@@ -358,6 +358,17 @@ var MT = (function (root) {
       trade: "Typisch handelbar: mit dem Trend, Rückläufer kaufen/verkaufen, keine Gegenrichtung ohne Strukturbruch."
     }
   };
+  // Texte vom Worker lesbar machen: Umlaute und deutsches Dezimalkomma.
+  function schoen(t) {
+    if (typeof t !== "string") return t;
+    return t.replace(/ueber/g, "über").replace(/hoehere/g, "höhere").replace(/verfuegbar/g, "verfügbar")
+      .replace(/\bfuer\b/g, "für").replace(/bestaetigt/g, "bestätigt").replace(/(\d)\.(\d)/g, "$1,$2");
+  }
+  // Markt gerade nicht im regulären Handel? Dann sind Bias und Regime Werte vom letzten Handelstag.
+  function ausserHandel(d) {
+    var m = d && d.market;
+    return !!(m && m.session && m.session !== "regulaer");
+  }
   function biasView(d, compact) {
     var b = d && d.bias;
     var side = b && b.label ? normSide(b.label) : "neutral";
@@ -371,20 +382,34 @@ var MT = (function (root) {
       h("p", { class: "eyebrow" }, compact ? "Bias" : "1 · Bias"),
       h("p", { class: "hero-word" }, known ? SIDE_SYM[side] + " " + word : word),
       sub.length ? h("p", { class: "hero-sub" }, sub.join(" · ")) : null);
+    if (known && ausserHandel(d)) {
+      node.appendChild(h("p", { class: "callout" }, h("b", null, "Stand vom letzten Handelstag. "),
+        compact ? "Gilt erst ab 15:30 Uhr neu." : "Die Börse ist gerade nicht im regulären Handel. Dieser Bias ist nur eine Vorab-Tendenz und wird erst nach der Eröffnung um 15:30 Uhr mit heutigen Daten neu berechnet."));
+    }
     if (compact) return node;
     if (known && side === "neutral") node.appendChild(h("p", { class: "callout" }, h("b", null, "Neutral. "), NEUTRAL_SATZ));
-    if (b && b.summary) node.appendChild(h("p", { class: "sentence" }, b.summary));
+    if (b && b.summary) node.appendChild(h("p", { class: "sentence" }, schoen(b.summary)));
     var f = b && Array.isArray(b.factors) ? b.factors : [];
     if (f.length) {
       node.appendChild(h("ul", { class: "factors" }, f.map(function (x) {
         var sd = normSide(x.side);
-        return h("li", null, sideBadge(sd), h("span", { class: "fname" }, x.name || x.key || "Faktor"), x.detail ? h("span", { class: "detail" }, x.detail) : null);
+        return h("li", null, sideBadge(sd), h("span", { class: "fname" }, x.name || x.key || "Faktor"), x.detail ? h("span", { class: "detail" }, schoen(x.detail)) : null);
       })));
     } else if (known) node.appendChild(h("p", { class: "muted small" }, "Keine Einzelfaktoren geliefert."));
     return node;
   }
   function regimeView(d, compact) {
     var r = d && d.regime;
+    var mk = d && d.market;
+    // Ohne frische Kerzen gibt es keine Einordnung: nicht "Balance" behaupten.
+    if (r && r.label && mk && !d.legacy && (mk.session === "geschlossen" || (ausserHandel(d) && isNum(mk.ageSeconds) && mk.ageSeconds > 1800))) {
+      var zu = h("section", { class: "card hero regime neutral" + (compact ? " compact" : ""), "aria-label": "Trend oder Range" },
+        h("p", { class: "eyebrow" }, compact ? "Regime" : "2 · Trend oder Range"),
+        h("p", { class: "hero-word" }, "Keine Einordnung"),
+        h("p", { class: "hero-sub" }, "Markt geschlossen"));
+      if (!compact) zu.appendChild(h("p", { class: "sentence" }, "Trend oder Range lässt sich nur im laufenden Handel bestimmen. Die Anzeige startet nach der Eröffnung um 15:30 Uhr, sobald genug Kerzen da sind."));
+      return zu;
+    }
     var known = !!(r && r.label);
     var dir = r && r.direction ? normSide(r.direction) : null;
     var kind = known ? (r.label === "Balance" ? "neutral" : dir || "neutral") : "neutral";
@@ -403,7 +428,7 @@ var MT = (function (root) {
     if (known) {
       var tx = REGIME_TEXT[r.label];
       node.appendChild(h("p", { class: "sentence" }, r.text || (tx ? tx.was : "")));
-      if (r.detail) node.appendChild(h("p", { class: "muted small" }, r.detail));
+      if (r.detail) node.appendChild(h("p", { class: "muted small" }, schoen(r.detail)));
       if (tx) node.appendChild(h("p", { class: "callout" }, h("b", null, "Was man hier handelt. "), tx.trade));
       if (r.label === "Imbalance" && dir && dir !== "neutral") node.appendChild(h("p", { class: "small muted" }, "Richtung: " + SIDE_WORD[dir] + (dir === "long" ? " – Rückläufer kaufen." : " – Rückläufer verkaufen.")));
     } else if (r && r.rawLabel) {

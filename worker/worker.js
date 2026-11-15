@@ -167,11 +167,11 @@ export function factorTag(completedDaily) {
   if (n >= SMA_DAYS) {
     const sma = completedDaily.slice(n - SMA_DAYS).reduce((s, k) => s + k.c, 0) / SMA_DAYS;
     smaPart = last.c > sma ? 1 : last.c < sma ? -1 : 0;
-    smaTxt = `Schluss ${fmt(last.c)} ${smaPart > 0 ? 'ueber' : smaPart < 0 ? 'unter' : 'auf'} 20-Tage-Schnitt ${fmt(sma)}`;
+    smaTxt = `Schluss ${fmt(last.c)} ${smaPart > 0 ? 'über' : smaPart < 0 ? 'unter' : 'auf'} 20-Tage-Schnitt ${fmt(sma)}`;
   }
   const hh = last.h > p1.h, hl = last.l > p1.l, lh = last.h < p1.h, ll = last.l < p1.l;
   const strPart = hh && hl ? 1 : lh && ll ? -1 : 0;
-  const strTxt = strPart > 0 ? 'hoehere Hochs und Tiefs' : strPart < 0 ? 'tiefere Hochs und Tiefs' : 'keine klare Hoch/Tief-Folge';
+  const strTxt = strPart > 0 ? 'höhere Hochs und Tiefs' : strPart < 0 ? 'tiefere Hochs und Tiefs' : 'keine klare Hoch/Tief-Folge';
   const total = smaPart + strPart;
   const v = total >= 2 ? 1 : total <= -2 ? -1 : 0;
   return { key: 'tag', name, side: sideOf(v), detail: `${smaTxt}; ${strTxt}.` };
@@ -193,17 +193,17 @@ export function factorH1(hourly) {
 
 export function factorLage(price, prev) {
   const name = 'Lage zum Vortag';
-  if (!isNum(price) || !prev) return { key: 'lage', name, side: 'Neutral', detail: 'Vortageswerte nicht verfuegbar.' };
-  if (price > prev.h) return { key: 'lage', name, side: 'Long', detail: `Kurs ${fmt(price)} ueber Vortageshoch ${fmt(prev.h)} (${fmtSigned(pct(price, prev.h))} %).` };
+  if (!isNum(price) || !prev) return { key: 'lage', name, side: 'Neutral', detail: 'Vortageswerte nicht verfügbar.' };
+  if (price > prev.h) return { key: 'lage', name, side: 'Long', detail: `Kurs ${fmt(price)} über Vortageshoch ${fmt(prev.h)} (${fmtSigned(pct(price, prev.h))} %).` };
   if (price < prev.l) return { key: 'lage', name, side: 'Short', detail: `Kurs ${fmt(price)} unter Vortagestief ${fmt(prev.l)} (${fmtSigned(pct(price, prev.l))} %).` };
   return { key: 'lage', name, side: 'Neutral', detail: `Kurs ${fmt(price)} im Vortagesbereich ${fmt(prev.l)} bis ${fmt(prev.h)}.` };
 }
 
 export function factorVwap(price, vwap) {
   const name = 'VWAP';
-  if (!isNum(price) || !isNum(vwap)) return { key: 'vwap', name, side: 'Neutral', detail: 'Sitzungs-VWAP noch nicht verfuegbar.' };
+  if (!isNum(price) || !isNum(vwap)) return { key: 'vwap', name, side: 'Neutral', detail: 'Sitzungs-VWAP noch nicht verfügbar.' };
   const d = pct(price, vwap);
-  if (d > VWAP_DEADBAND_PCT) return { key: 'vwap', name, side: 'Long', detail: `Kurs ${fmt(price)} ${fmtSigned(d)} % ueber VWAP ${fmt(vwap)}.` };
+  if (d > VWAP_DEADBAND_PCT) return { key: 'vwap', name, side: 'Long', detail: `Kurs ${fmt(price)} ${fmtSigned(d)} % über VWAP ${fmt(vwap)}.` };
   if (d < -VWAP_DEADBAND_PCT) return { key: 'vwap', name, side: 'Short', detail: `Kurs ${fmt(price)} ${fmtSigned(d)} % unter VWAP ${fmt(vwap)}.` };
   return { key: 'vwap', name, side: 'Neutral', detail: `Kurs ${fmt(price)} nahe VWAP ${fmt(vwap)} (${fmtSigned(d)} %, Totband +-${VWAP_DEADBAND_PCT} %).` };
 }
@@ -231,7 +231,7 @@ export function combineBias(factors) {
 export function computeRegime(c5) {
   const base = { label: 'Balance', direction: null, text: 'Range (Balance)', efficiency: 0, timeframe: `5-Min, letzte ${REGIME_N} Kerzen (${REGIME_N * 5 / 60} h)`, detail: '', since: null };
   if (!Array.isArray(c5) || c5.length < REGIME_N) {
-    return { ...base, detail: 'Zu wenige 5-Minuten-Kerzen fuer eine Einordnung.' };
+    return { ...base, detail: 'Zu wenige 5-Minuten-Kerzen für eine Einordnung.' };
   }
   let state = 'Balance', dir = 0, since = null;
   let last = { eff: 0, breakout: 0, net: 0 };
@@ -262,12 +262,12 @@ export function computeRegime(c5) {
   if (state === 'Imbalance') {
     return {
       ...base, label: 'Imbalance', direction: dirName, text: `Trend ${dirName} (Imbalance)`, efficiency, since: iso(since),
-      detail: `Effizienz ${fmt(last.eff)} (Schwelle ${EFF_EXIT}) ueber ${REGIME_N} Kerzen, Kurs ${dir > 0 ? 'ueber' : 'unter'} der Spanne der Vorkerzen: gerichtete Bewegung.`,
+      detail: `Effizienz ${fmt(last.eff)} (Schwelle ${EFF_EXIT}) über ${REGIME_N} Kerzen, Kurs ${dir > 0 ? 'über' : 'unter'} der Spanne der Vorkerzen: gerichtete Bewegung.`,
     };
   }
   return {
     ...base, efficiency, since: iso(since),
-    detail: `Effizienz ${fmt(last.eff)} ueber ${REGIME_N} Kerzen (Eintritt ab ${EFF_ENTER}), kein bestaetigter Ausbruch: Kurs pendelt in der Spanne.`,
+    detail: `Effizienz ${fmt(last.eff)} über ${REGIME_N} Kerzen (Eintritt ab ${EFF_ENTER}), kein bestätigter Ausbruch: Kurs pendelt in der Spanne.`,
   };
 }
 
