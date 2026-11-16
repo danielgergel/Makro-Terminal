@@ -41,15 +41,7 @@
     var days = [];
     for (var i = 0; i < 7; i++) days.push(MT.addDays(monday, i));
     $("kal-range").textContent = MT.dateDE(days[0], true).replace(/^\S+\s/, "") + " – " + MT.dateDE(days[6], true).replace(/^\S+\s/, "");
-    var nxt = cal.events.filter(function (e) { return e.ts > now; })[0];
-    var nb = h("div", { class: "nextev" });
-    if (nxt) {
-      nb.appendChild(h("p", { class: "small muted" }, "Nächster Termin"));
-      nb.appendChild(h("p", null, h("strong", null, nxt.title), " · " + MT.dateDE(nxt.dayDE, true) + ", " + nxt.timeDE + " Uhr"));
-      nb.appendChild(h("p", { class: "countdown", id: "cd-next", "aria-live": "off" }, MT.countdown(nxt.ts - now)));
-    } else nb.appendChild(h("p", null, "Kein weiterer Termin im Kalender."));
-    box.appendChild(nb);
-    nextTs = nxt ? nxt.ts : null;
+    nextTs = null; // Kasten "Nächster Termin" auf Wunsch entfernt; nur der heutige Tag ist markiert.
 
     days.forEach(function (day) {
       var evs = cal.events.filter(function (e) { return e.dayDE === day; });
