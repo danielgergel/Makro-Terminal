@@ -10,7 +10,17 @@
   function settings() { var s = MT.store.get(K.set, {}) || {}; var o = {}; Object.keys(DEF).forEach(function (k) { o[k] = s[k] !== undefined && s[k] !== null ? s[k] : DEF[k]; }); return o; }
   function nyToday() { return MT.dayKey(Date.now(), NY); }
   function numIn(el, g) { return MT.parseNum(el.value, g); }
-  function nqPrice() { var v = numIn($("nq"), true); return v && v > 0 ? v : null; }
+  function atasLive() { return MT.isAtas(snapData); }
+  /* Mit ATAS-Daten ist der NQ-Kurs schon im Snapshot, sonst manuell eingetippt (QQQ-Ersatzdaten) */
+  function nqPrice() {
+    if (atasLive() && MT.isNum(snapData.market.lastPrice) && snapData.market.lastPrice > 0) return snapData.market.lastPrice;
+    var v = numIn($("nq"), true); return v && v > 0 ? v : null;
+  }
+  function syncNqField() {
+    var on = atasLive(), el = $("nq"), box = el.closest ? el.closest(".field") : null;
+    el.disabled = on;
+    if (box) box.hidden = on;
+  }
 
   /* ---------- Zähler ---------- */
   function counters() {
@@ -187,21 +197,22 @@
   var POS = { ueber_vortageshoch: "Über dem Vortageshoch", im_vortagesbereich: "Im Vortagesbereich", unter_vortagestief: "Unter dem Vortagestief" };
   function pts(p, nq) { return nq && MT.isNum(p) ? MT.signed(nq * p / 100, 1, " Pkt") : null; }
   function renderLage() {
-    var d = snapData, L = d && d.levels, box = $("lage-body"), nq = nqPrice();
+    var d = snapData, L = d && d.levels, box = $("lage-body"), nq = nqPrice(), atas = atasLive();
+    syncNqField();
     MT.clear(box);
     if (!L) { box.appendChild(h("p", { class: "muted" }, "Keine Level-Daten (der Worker liefert sie erst mit v2).")); return; }
     var pos = L.position ? POS[L.position] || L.position : "unbekannt";
     var cls = L.position === "ueber_vortageshoch" ? "long" : L.position === "unter_vortagestief" ? "short" : "neutral";
     box.appendChild(h("p", null, h("span", { class: "badge " + cls }, pos)));
     function row(name, price, p) {
-      var pt = pts(p, nq);
+      var pt = atas && MT.isNum(price) && nq ? MT.signed(nq - price, 1, " Pkt") : pts(p, nq);
       box.appendChild(h("div", { class: "kv" }, h("span", { class: "k" }, name + (MT.isNum(price) ? " (" + MT.num(price, 2) + ")" : "")),
-        h("span", { class: "v" }, MT.signed(p, 2, " %"), pt ? " ≈ " + pt : "")));
+        h("span", { class: "v" }, atas && pt ? pt + " · " + MT.signed(p, 2, " %") : MT.signed(p, 2, " %") + (pt ? " ≈ " + pt : ""))));
     }
     row("Vortageshoch", L.prevHigh, L.distPrevHighPct);
     row("Vortagestief", L.prevLow, L.distPrevLowPct);
     row("VWAP", L.vwap, L.distVwapPct);
-    box.appendChild(h("p", { class: "small muted" }, "Abstand zum Kurs, Vorzeichen: + = Kurs über dem Level. Preise in QQQ" + (nq ? "; Punkte mit NQ " + MT.num(nq, 2) + " umgerechnet." : "; NQ-Kurs eintippen für Punkte.")));
+    box.appendChild(h("p", { class: "small muted" }, "Abstand zum Kurs, Vorzeichen: + = Kurs über dem Level. " + (atas ? "Preise in NQ-Punkten, live aus ATAS (Kurs " + MT.num(nq, 2) + ")." : "Preise in QQQ" + (nq ? "; Punkte mit NQ " + MT.num(nq, 2) + " umgerechnet." : "; NQ-Kurs eintippen für Punkte."))));
     var g = L.gapPct;
     box.appendChild(h("div", { class: "kv" }, h("span", { class: "k" }, "Eröffnungslücke"),
       h("span", { class: "v" }, MT.isNum(g) ? (Math.abs(g) < 0.05 ? "keine nennenswerte Lücke" : (g > 0 ? "Gap-Up " : "Gap-Down ") + MT.signed(g, 2, " %")) + (pts(g, nq) ? " ≈ " + pts(g, nq) : "") : "–")));
@@ -214,6 +225,7 @@
   }
   function renderErw() {
     var R = snapData && snapData.risk, box = $("erw-body"), nq = nqPrice();
+    syncNqField();
     MT.clear(box);
     if (!R) { box.appendChild(h("p", { class: "muted" }, "Keine Risiko-Daten (der Worker liefert sie erst mit v2).")); return; }
     if (MT.isNum(R.expectedMovePct)) {
@@ -292,6 +304,7 @@
     });
     $("cockbar").appendChild(MT.biasView(null, true)); $("cockbar").appendChild(MT.regimeView(null, true));
     $("nq").value = MT.store.get(K.nq, "") || "";
+    syncNqField();
     $("nq").addEventListener("input", function () { MT.store.set(K.nq, $("nq").value); renderLage(); renderErw(); });
     var c = MT.store.get(K.calc, null);
     if (c) { $("inst").value = c.inst || "NQ"; $("stop").value = c.stop || ""; $("ctr").value = c.ctr || ""; $("maxrisk").value = c.maxrisk || ""; $("target").value = c.target || ""; }

@@ -12,7 +12,9 @@ var MT = (function (root) {
     }
   } catch (e) { ROOT_URL = ""; }
   var SEARCH = (root.location && root.location.search) || "";
-  var MOCK = /(^|[?&])mock=1(&|$)/.test(SEARCH);
+  var MOCK_M = /(^|[?&])mock=(1|bridge)(&|$)/.exec(SEARCH);
+  var MOCK = !!MOCK_M;
+  var MOCK_KIND = MOCK_M ? MOCK_M[2] : "";   /* "1" = QQQ-Testdaten, "bridge" = ATAS-Testdaten */
 
   /* ---------- kleine Helfer ---------- */
   function h(tag, attrs) {
@@ -245,10 +247,11 @@ var MT = (function (root) {
   }
   function loadSnapshot() {
     if (MOCK) {
-      return fetchJSON(url("data/mock-snapshot.json")).then(function (d) {
+      return fetchJSON(url(MOCK_KIND === "bridge" ? "data/mock-bridge-snapshot.json" : "data/mock-snapshot.json")).then(function (d) {
         var now = Date.now();
-        d.generatedAt = new Date(now - 9000).toISOString();
-        if (d.market) { d.market.ageSeconds = 9; d.market.lastTime = new Date(now - 9000).toISOString(); }
+        var agoMs = MOCK_KIND === "bridge" ? 4000 : 9000;
+        d.generatedAt = new Date(now - agoMs).toISOString();
+        if (d.market) { d.market.ageSeconds = Math.round(agoMs / 1000); d.market.lastTime = new Date(now - agoMs).toISOString(); }
         return { kind: "mock", data: d };
       });
     }
@@ -263,14 +266,18 @@ var MT = (function (root) {
   }
 
   /* ---------- Live-Zustand ---------- */
-  var state = { kind: null, data: null, fetchedAt: null, error: null, loading: false, mock: MOCK };
+  var state = { kind: null, data: null, fetchedAt: null, error: null, loading: false, mock: MOCK, mockKind: MOCK_KIND, seenAtas: false, lastTry: 0 };
+  var POLL_MS = 30000, POLL_ATAS_MS = 10000;
+  function isAtas(d) { return !!(d && d.market && d.market.source === "atas"); }
   var listeners = [];
   var lastBanner = null;
   function doLoad() {
     if (state.loading) return Promise.resolve();
     state.loading = true;
+    state.lastTry = Date.now();
     return loadSnapshot().then(function (r) {
       state.kind = r.kind; state.data = r.data; state.fetchedAt = Date.now(); state.error = null;
+      if (isAtas(r.data)) state.seenAtas = true;
     }).catch(function (e) {
       state.error = (e && e.message) || "Fehler";
     }).then(function () {
@@ -282,12 +289,16 @@ var MT = (function (root) {
   function startLive(cb) {
     if (cb) listeners.push(cb);
     doLoad();
-    setInterval(function () { if (!document.hidden) doLoad(); }, 30000);
+    /* Takt: 10 s solange ATAS-Daten kommen, sonst 30 s (wechselt von selbst mit der Quelle) */
+    setInterval(function () {
+      if (document.hidden) return;
+      if (Date.now() - state.lastTry >= (isAtas(state.data) ? POLL_ATAS_MS : POLL_MS) - 500) doLoad();
+    }, 2000);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) doLoad(); });
     var btn = document.getElementById("refresh");
     if (btn) btn.addEventListener("click", function () { doLoad(); });
     setInterval(updateStatus, 1000);
-    document.querySelectorAll("a[data-nav]").forEach(function (a) { if (MOCK) a.setAttribute("href", a.getAttribute("href") + "?mock=1"); });
+    document.querySelectorAll("a[data-nav]").forEach(function (a) { if (MOCK) a.setAttribute("href", a.getAttribute("href") + "?mock=" + MOCK_KIND); });
   }
   function dataAgeSec() {
     var d = state.data;
@@ -312,7 +323,8 @@ var MT = (function (root) {
     if (px) {
       var m = d && d.market;
       if (m) {
-        var bits = ["Proxy " + (m.proxy || "QQQ") + " statt NQ"];
+        var bits = isAtas(d) ? ["NQ live aus ATAS"] : ["Proxy " + (m.proxy || "QQQ") + " statt NQ"];
+        if (isAtas(d) && m.instrument) bits.push(m.instrument);
         if (SESSION_TEXT[m.session]) bits.push(SESSION_TEXT[m.session]);
         else if (m.extendedHours) bits.push("erweiterte Handelszeit");
         if (isNum(m.lastPrice)) bits.push("Kurs " + num(m.lastPrice, 2));
@@ -325,12 +337,13 @@ var MT = (function (root) {
       if (d) {
         var mk = d.market || {};
         if (state.kind === "legacy") { level = level || "warn"; items.push("Alter Datenstand, Worker noch nicht aktualisiert. Nur Bias und Marktphase verfügbar."); }
-        if (state.mock) { level = level || "info"; items.push("Testdaten (?mock=1) – keine Live-Daten."); }
+        if (state.mock) { level = level || "info"; items.push("Testdaten (?mock=" + MOCK_KIND + ") – keine Live-Daten."); }
         if (age > 300) { level = level === "err" ? level : "warn"; items.push("Daten älter als 5 Minuten – nicht blind darauf handeln."); }
         if (mk.stale === true || (isNum(mk.ageSeconds) && mk.ageSeconds > 300)) {
           if (mk.session === "geschlossen") { level = level || "info"; items.push("Börse geschlossen – letzter Kurs ist nicht aktuell."); }
           else { level = level === "err" ? level : "warn"; items.push("Kurs veraltet (stale)" + (isNum(mk.ageSeconds) ? ", letzter Kurs " + ageText(mk.ageSeconds) : "") + "."); }
         }
+        if (state.seenAtas && !isAtas(d) && state.kind === "v2") { level = level || "info"; items.push("ATAS-Brücke sendet nicht – Anzeige läuft auf QQQ-Ersatzdaten."); }
         if (d.diagnostics && Array.isArray(d.diagnostics.errors) && d.diagnostics.errors.length) {
           level = level || "warn"; items.push("Worker meldet Fehler: " + d.diagnostics.errors.slice(0, 3).map(function (e) { return typeof e === "string" ? e : JSON.stringify(e); }).join("; "));
         }
@@ -367,6 +380,7 @@ var MT = (function (root) {
   // Markt gerade nicht im regulären Handel? Dann sind Bias und Regime Werte vom letzten Handelstag.
   function ausserHandel(d) {
     var m = d && d.market;
+    if (isAtas(d)) return m.session === "geschlossen";   /* ATAS liefert rund um die Uhr */
     return !!(m && m.session && m.session !== "regulaer");
   }
   function biasView(d, compact) {
@@ -481,7 +495,7 @@ var MT = (function (root) {
   }
 
   var api = {
-    cfg: CFG, TZ_BERLIN: TZ_BERLIN, TZ_NY: TZ_NY, mock: MOCK, state: state,
+    cfg: CFG, TZ_BERLIN: TZ_BERLIN, TZ_NY: TZ_NY, mock: MOCK, state: state, isAtas: isAtas,
     h: h, clear: clear, store: store, num: num, signed: signed, pct: pct, isNum: isNum,
     zonedToUtc: zonedToUtc, dayKey: dayKey, hm: hm, addDays: addDays, weekday: weekday, diffDays: diffDays,
     dateDE: dateDE, countdown: countdown, ageText: ageText, parts: parts,

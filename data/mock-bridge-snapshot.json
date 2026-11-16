@@ -1,0 +1,69 @@
+{
+  "version": 2,
+  "generatedAt": "2026-11-13T15:42:10Z",
+  "market": {
+    "proxy": "NQ",
+    "source": "atas",
+    "instrument": "NQZ6",
+    "session": "regulaer",
+    "extendedHours": false,
+    "lastPrice": 25000.25,
+    "lastTime": "2026-11-13T15:42:06Z",
+    "ageSeconds": 4,
+    "stale": false
+  },
+  "bias": {
+    "label": "Long",
+    "score": 3,
+    "confidence": "hoch",
+    "factors": [
+      { "key": "tag", "name": "Tagesstruktur", "side": "Long", "detail": "Schluss 24.800,00 über 20-Tage-Schnitt 24.350,00; höhere Hochs und Tiefs." },
+      { "key": "h1", "name": "Stundenstruktur", "side": "Long", "detail": "Steigende Swing-Hochs und -Tiefs in den Stundenkerzen." },
+      { "key": "lage", "name": "Lage zum Vortag", "side": "Long", "detail": "Kurs 25.000,25 über Vortageshoch 24.900,00 (+0,40 %)." },
+      { "key": "vwap", "name": "VWAP", "side": "Neutral", "detail": "Kurs 25.000,25 nahe VWAP 24.995,00 (+0,02 %)." }
+    ],
+    "summary": "Bias Long (Score +3, Konfidenz hoch): Tagesstruktur, Stundenstruktur, Lage zum Vortag zeigen nach oben."
+  },
+  "regime": {
+    "label": "Imbalance",
+    "direction": "Long",
+    "text": "Trend Long (Imbalance)",
+    "efficiency": 0.52,
+    "timeframe": "5-Min, letzte 24 Kerzen (2 h)",
+    "detail": "Effizienz 0.52 über 24 Kerzen, Kurs über der Spanne der Vorkerzen: gerichtete Bewegung.",
+    "since": "2026-11-13T14:35:00Z"
+  },
+  "levels": {
+    "prevHigh": 24900,
+    "prevLow": 24650,
+    "prevClose": 24800,
+    "todayOpen": 24850,
+    "todayHigh": 25010,
+    "todayLow": 24840,
+    "vwap": 24995,
+    "position": "ueber_vortageshoch",
+    "gapPct": 0.2,
+    "atrPct14": 1.4,
+    "rangeTodayPct": 0.69,
+    "distPrevHighPct": 0.4,
+    "distPrevLowPct": 1.42,
+    "distVwapPct": 0.02
+  },
+  "risk": {
+    "score": 66,
+    "label": "Risk-On",
+    "vix": { "value": 15.8, "date": "2026-11-12", "changePct": -2.1 },
+    "expectedMovePct": 0.99,
+    "components": [
+      { "name": "QQQ", "changePct": 0.6, "side": "Risk-On" },
+      { "name": "VIX", "changePct": -2.1, "side": "Risk-On" },
+      { "name": "TLT (Anleihen)", "changePct": -0.3, "side": "Risk-On" },
+      { "name": "UUP (US-Dollar)", "changePct": 0.1, "side": "Neutral" }
+    ]
+  },
+  "diagnostics": {
+    "twelve": {},
+    "errors": [],
+    "bridge": { "configured": true, "lastReceivedAgeSeconds": 4, "kv": false }
+  }
+}

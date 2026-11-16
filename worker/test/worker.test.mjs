@@ -311,3 +311,146 @@ test('Routing, CORS, 404 und Health', async () => {
   const d = await worker.fetch(req('/api/health'), ENV);
   assert.equal(d.status, 200);
 });
+
+// ---------- ATAS-Bruecke ----------
+const BKEY = 'BRUECKE-GEHEIM-1';
+const BENV = { ...ENV, BRIDGE_KEY: BKEY };
+const bpayload = (over = {}) => ({
+  v: 1, instrument: 'NQZ6', timeframe: '15s', sentAt: '2026-11-13T17:49:58Z',
+  market: { lastPrice: 25000.25, lastTime: '2026-11-13T17:49:57Z', session: 'regulaer' },
+  bias: { label: 'Long', score: 3, confidence: 'hoch', factors: [{ key: 'tag', name: 'Tagesstruktur', side: 'Long', detail: 'x', extra: 1 }], summary: 's' },
+  regime: { label: 'Imbalance', direction: 'Long', text: 'Trend Long (Imbalance)', efficiency: 0.41, timeframe: '5-Min', detail: 'd', since: null },
+  levels: { prevHigh: 24900, prevLow: 24700, prevClose: 24800, todayOpen: 24850, todayHigh: 25010, todayLow: 24840, vwap: 24950, position: 'ueber_vortageshoch', gapPct: 0.2, atrPct14: 1.4, rangeTodayPct: 0.7, distPrevHighPct: 0.4, distPrevLowPct: 1.2, distVwapPct: 0.2 },
+  ...over,
+});
+const post = (body, key = BKEY, raw) => new Request('https://x.workers.dev/api/v2/ingest', {
+  method: 'POST', headers: { 'X-Bridge-Key': key, 'Content-Type': 'application/json' }, body: raw ?? JSON.stringify(body),
+});
+const get = (p) => new Request('https://x.workers.dev' + p);
+function fakeKv() {
+  const store = new Map(); const puts = [];
+  return { puts, async put(k, v) { puts.push(k); store.set(k, v); }, async get(k, t) { const v = store.get(k); return v ? (t === 'json' ? JSON.parse(v) : v) : null; } };
+}
+
+test('Ingest: Auth 503 ohne Schluessel, 401 bei falschem/fehlendem Schluessel, Schluessel nie in Antwort', async () => {
+  _resetState();
+  let r = await handle(post(bpayload()), ENV, NOW);
+  assert.equal(r.status, 503);
+  assert.equal((await r.json()).error, 'bridge_not_configured');
+  r = await handle(post(bpayload(), 'falsch'), BENV, NOW);
+  assert.equal(r.status, 401);
+  r = await handle(new Request('https://x.workers.dev/api/v2/ingest', { method: 'POST', body: '{}' }), BENV, NOW);
+  assert.equal(r.status, 401);
+  assert.ok(!(await r.text()).includes(BKEY));
+  r = await handle(post(bpayload()), BENV, NOW);
+  assert.equal(r.status, 200);
+  assert.ok(!JSON.stringify(await r.json()).includes(BKEY));
+  r = await handle(get('/api/v2/ingest'), BENV, NOW);
+  assert.equal(r.status, 405);
+});
+test('Ingest: Validierung 400 und Groessenlimit 413', async () => {
+  _resetState();
+  const bads = [
+    bpayload({ v: 2 }),
+    bpayload({ market: { lastPrice: 'x', session: 'regulaer' } }),
+    bpayload({ market: { lastPrice: 1, session: 'mond' } }),
+    bpayload({ bias: { ...bpayload().bias, label: 'Hoch' } }),
+    bpayload({ bias: { ...bpayload().bias, factors: Array(9).fill(bpayload().bias.factors[0]) } }),
+    bpayload({ regime: { ...bpayload().regime, efficiency: 'viel' } }),
+    bpayload({ levels: { ...bpayload().levels, vwap: 'abc' } }),
+  ];
+  for (const b of bads) assert.equal((await handle(post(b), BENV, NOW)).status, 400);
+  assert.equal((await handle(post(null, BKEY, 'kein json'), BENV, NOW)).status, 400);
+  const big = bpayload({ bias: { ...bpayload().bias, summary: 'x'.repeat(20000) } });
+  assert.equal((await handle(post(big), BENV, NOW)).status, 413);
+  // Unbekannte Felder entfallen, Texte werden gekuerzt
+  assert.equal((await handle(post(bpayload({ evil: 1, bias: { ...bpayload().bias, summary: 'y'.repeat(900) } })), BENV, NOW)).status, 200);
+  globalThis.fetch = makeFetch();
+  const s = await (await handle(get('/api/v2/snapshot'), BENV, NOW + 1000)).json();
+  assert.equal(s.bias.summary.length, 400);
+  assert.equal(s.bias.factors[0].extra, undefined);
+  assert.equal(s.evil, undefined);
+});
+test('Frische Bruecken-Daten ersetzen QQQ, Risiko bleibt aus QQQ/VIX', async () => {
+  _resetState();
+  globalThis.fetch = makeFetch();
+  await handle(post(bpayload()), BENV, NOW);
+  const s = await (await handle(get('/api/v2/snapshot'), BENV, NOW + 60e3)).json();
+  assert.equal(s.market.source, 'atas');
+  assert.equal(s.market.proxy, 'NQ');
+  assert.equal(s.market.instrument, 'NQZ6');
+  assert.equal(s.market.lastPrice, 25000.25);
+  assert.equal(s.market.ageSeconds, 60);
+  assert.equal(s.market.stale, false);
+  assert.equal(s.bias.label, 'Long');
+  assert.equal(s.levels.prevHigh, 24900);
+  assert.equal(s.risk.vix.value, 18.7);
+  assert.deepEqual(s.diagnostics.bridge, { configured: true, lastReceivedAgeSeconds: 60, kv: false });
+  const h = await (await handle(get('/api/health'), BENV, NOW)).json();
+  assert.deepEqual(h.bridge, { configured: true, kv: false });
+});
+test('Bruecken-Daten werden auch bei QQQ-Ausfall geliefert (Risiko leer)', async () => {
+  _resetState();
+  globalThis.fetch = makeFetch({ failTd: true, failFred: true });
+  await handle(post(bpayload()), BENV, NOW);
+  const s = await (await handle(get('/api/v2/snapshot'), BENV, NOW + 5e3)).json();
+  assert.equal(s.market.source, 'atas');
+  assert.equal(s.risk.score, null);
+  assert.equal(s.risk.vix, null);
+});
+test('Veraltete Bruecken-Daten: Rueckfall auf QQQ', async () => {
+  _resetState();
+  globalThis.fetch = makeFetch();
+  await handle(post(bpayload()), BENV, NOW);
+  const s = await (await handle(get('/api/v2/snapshot'), BENV, NOW + 181e3)).json();
+  assert.equal(s.market.source, 'twelvedata');
+  assert.equal(s.market.proxy, 'QQQ');
+  assert.equal(s.diagnostics.bridge.lastReceivedAgeSeconds, 181);
+});
+test('Ohne Bruecken-Daten: source twelvedata, lastReceived null', async () => {
+  _resetState();
+  globalThis.fetch = makeFetch();
+  const s = await (await handle(get('/api/v2/snapshot'), ENV, NOW)).json();
+  assert.equal(s.market.source, 'twelvedata');
+  assert.deepEqual(s.diagnostics.bridge, { configured: false, lastReceivedAgeSeconds: null, kv: false });
+});
+test('KV-Drossel: hoechstens ein Schreibzugriff je 120 s, sofort bei Label-Wechsel, Tagesdeckel', async () => {
+  _resetState();
+  const kv = fakeKv();
+  const env = { ...BENV, BRIDGE: kv };
+  const send = (t, b) => handle(post(b || bpayload()), env, t);
+  await send(NOW);
+  await send(NOW + 15e3);
+  await send(NOW + 60e3);
+  await send(NOW + 119e3);
+  assert.equal(kv.puts.length, 1);
+  await send(NOW + 121e3);
+  assert.equal(kv.puts.length, 2);
+  await send(NOW + 125e3, bpayload({ bias: { ...bpayload().bias, label: 'Short', score: -3 } }));
+  assert.equal(kv.puts.length, 3);
+  await send(NOW + 130e3, bpayload({ bias: { ...bpayload().bias, label: 'Short', score: -3 }, regime: { ...bpayload().regime, direction: 'Short' } }));
+  assert.equal(kv.puts.length, 4);
+  // KV dient als Rueckfall, wenn der Zwischenspeicher leer ist
+  _resetState();
+  globalThis.fetch = makeFetch();
+  const s = await (await handle(get('/api/v2/snapshot'), env, NOW + 140e3)).json();
+  assert.equal(s.market.source, 'atas');
+  assert.equal(s.diagnostics.bridge.kv, true);
+  // Tagesdeckel
+  _resetState();
+  const kv2 = fakeKv();
+  const env2 = { ...BENV, BRIDGE: kv2 };
+  for (let i = 0; i < 905; i++) {
+    const b = bpayload({ bias: { ...bpayload().bias, label: i % 2 ? 'Long' : 'Short' } });
+    await handle(post(b), env2, NOW + i * 1000);
+  }
+  assert.equal(kv2.puts.length, 900);
+});
+test('Ohne KV-Binding funktioniert alles (Zwischenspeicher)', async () => {
+  _resetState();
+  globalThis.fetch = makeFetch();
+  const r = await handle(post(bpayload()), BENV, NOW);
+  assert.equal((await r.json()).kvWritten, false);
+  const s = await (await handle(get('/api/v2/snapshot'), BENV, NOW + 10e3)).json();
+  assert.equal(s.market.source, 'atas');
+});

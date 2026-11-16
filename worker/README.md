@@ -1,7 +1,7 @@
 # Makro-Terminal Worker v2
 
-Ein einzelnes Cloudflare-Worker-Modul (`worker.js`), keine Abhaengigkeiten, keine Bindings ausser Secrets.
-Liefert `GET /api/v2/snapshot` (Bias Long/Short und Balance/Imbalance fuer NQ, per QQQ-Proxy) und `GET /api/health`.
+Ein einzelnes Cloudflare-Worker-Modul (`worker.js`), keine Abhaengigkeiten, keine Pflicht-Bindings (nur Secrets; ein KV-Speicher ist optional, siehe unten).
+Liefert `GET /api/v2/snapshot`, `POST /api/v2/ingest` (Daten vom ATAS-Indikator) und `GET /api/health`. Der Snapshot enthält Bias Long/Short und Balance/Imbalance (für NQ), normalerweise per QQQ-Proxy, bei frischen ATAS-Daten direkt aus NQ.
 
 ## Einfuegen im Cloudflare-Dashboard
 
@@ -13,7 +13,35 @@ Liefert `GET /api/v2/snapshot` (Bias Long/Short und Balance/Imbalance fuer NQ, p
 6. Pruefen: `https://makro-terminal-api.danielgergel.workers.dev/api/health` muss `"ok": true` und `"twelveData": true` zeigen. Dann `/api/v2/snapshot` aufrufen.
 
 Hinweis: Der Worker ist als ES-Modul geschrieben (`export default { fetch }`). Die zusaetzlichen Exporte (`buildSnapshot`, `analyze` usw.) ignoriert Cloudflare, sie dienen nur den Tests.
-Der Worker braucht keine `wrangler.toml`-Bindings (kein KV, kein D1).
+Der Worker braucht keine `wrangler.toml`-Bindings (KV ist optional).
+
+## ATAS-Brücke einrichten (NQ live statt QQQ)
+
+Der ATAS-Indikator schickt alle paar Sekunden NQ-Daten an den Worker. Solange die Daten frisch sind (jünger als 3 Minuten), zeigt das Terminal NQ live aus ATAS an. Kommt nichts mehr an, schaltet es von selbst auf die QQQ-Ersatzdaten zurück.
+
+**Wichtig: Der Worker-Code muss nach dieser Änderung noch einmal komplett eingefügt werden** (Schritte 1 bis 4 oben mit der neuen `worker/worker.js`), sonst kennt der Worker den neuen Weg `/api/v2/ingest` nicht.
+
+### 1. Brücken-Kennwort als Secret anlegen (Pflicht)
+
+1. Du denkst dir selbst ein langes, zufälliges Kennwort aus (mindestens 30 Zeichen, Buchstaben und Zahlen gemischt, am besten aus einem Passwort-Manager). Es ist kein Schlüssel von irgendeinem Dienst, du bestimmst es selbst.
+2. Cloudflare-Dashboard, Workers & Pages, Worker `makro-terminal-api`, Reiter **Settings**, Bereich **Variables and Secrets**, **Add**.
+3. Typ **Secret**, Name genau `BRIDGE_KEY`, Wert = dein Kennwort. Speichern und deployen.
+4. Dasselbe Kennwort trägst du im ATAS-Indikator unter der Einstellung **„Brücken-Kennwort“** ein.
+5. Das Kennwort steht nirgends im Code und wird vom Worker nie ausgegeben. Ohne `BRIDGE_KEY` antwortet der Worker auf Daten vom Indikator mit „503 bridge_not_configured“, mit falschem Kennwort mit „401“.
+
+### 2. KV-Speicher anlegen (optional)
+
+Ohne KV merkt sich der Worker die letzten Daten nur im Zwischenspeicher des jeweiligen Cloudflare-Standorts. Das reicht meistens. Mit KV überleben die Daten auch einen Standortwechsel oder Neustart des Workers.
+
+1. Cloudflare-Dashboard, **Storage & Databases**, **KV**, **Create a namespace**, Name z. B. `makro-bridge`.
+2. Worker `makro-terminal-api`, **Settings**, **Bindings**, **Add**, **KV namespace**. Variablenname genau `BRIDGE`, Namespace `makro-bridge` auswählen, speichern und deployen.
+3. Der Worker schreibt höchstens alle 120 Sekunden in KV (sofort nur, wenn sich Bias oder Regime ändern) und nie mehr als 900-mal pro Tag, damit die Gratis-Grenze von 1000 Schreibzugriffen nicht erreicht wird.
+
+### 3. Prüfen
+
+- `https://makro-terminal-api.danielgergel.workers.dev/api/health` zeigt unter `bridge` ob das Kennwort (`configured`) und KV (`kv`) erkannt wurden.
+- Läuft der Indikator, steht in `/api/v2/snapshot` unter `market`: `"source": "atas"` und `"proxy": "NQ"`. Unter `diagnostics.bridge.lastReceivedAgeSeconds` steht, wie lange der letzte Empfang her ist.
+- Das Risiko (VIX, Anleihen, Dollar) kommt weiterhin aus den QQQ-Daten. Fällt diese Quelle aus, liefert der Worker die ATAS-Daten trotzdem, nur ohne Risiko-Wert.
 
 ## Datenquellen
 

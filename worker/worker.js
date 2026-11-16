@@ -1,5 +1,5 @@
 // Makro-Terminal API v2 - Cloudflare Worker (ES-Modul, keine Abhaengigkeiten)
-// Secrets: TWELVEDATA_API_KEY (Pflicht). Keine Bindings.
+// Secrets: TWELVEDATA_API_KEY (Pflicht), BRIDGE_KEY (fuer ATAS-Bruecke). Optional: KV-Binding BRIDGE.
 // Proxy fuer NQ: QQQ (Twelve Data Gratis-Tarif hat keine Futures).
 // Logik und Abrufbudget: siehe README.md
 
@@ -381,7 +381,7 @@ export function analyze(inp) {
     version: VERSION,
     generatedAt: iso(now),
     market: {
-      proxy: PROXY, session, extendedHours: hasExt,
+      proxy: PROXY, source: 'twelvedata', session, extendedHours: hasExt,
       lastPrice: round(price, 4), lastTime: last ? iso(last.t) : null, ageSeconds, stale: !!stale,
     },
     bias, regime, levels, risk,
@@ -394,6 +394,13 @@ const mem = new Map();
 const failUntil = new Map();
 const inflight = new Map();
 export function _resetState() { mem.clear(); failUntil.clear(); inflight.clear(); }
+
+// ATAS-Bruecke
+const BRIDGE_FRESH_S = 180;         // so lange gelten Bruecken-Daten als frisch
+const BRIDGE_MAX_BYTES = 16 * 1024;
+const KV_MIN_INTERVAL_S = 120;      // KV hoechstens alle 120 s beschreiben (ausser bei Wechsel)
+const KV_DAILY_CAP = 900;           // Gratis-Tarif erlaubt 1000 Schreibzugriffe pro Tag
+const KV_KEY = 'bridge:latest';
 
 async function storeGet(key) {
   let best = mem.get(key);
@@ -425,8 +432,9 @@ class UpstreamError extends Error {
 
 function sanitize(msg, env) {
   let s = String(msg || '');
-  const key = env && env.TWELVEDATA_API_KEY;
-  if (key) s = s.split(key).join('***');
+  for (const key of [env && env.TWELVEDATA_API_KEY, env && env.BRIDGE_KEY]) {
+    if (key) s = s.split(key).join('***');
+  }
   s = s.replace(/apikey=[^&\s"']+/gi, 'apikey=***');
   return s.slice(0, 300);
 }
@@ -510,7 +518,7 @@ function isPlanRejection(e) {
   return e.code === 400 && /prepost|plan|upgrade|subscription/i.test(e.message);
 }
 
-export async function buildSnapshot(env, now = Date.now()) {
+export async function buildSnapshot(env, now = Date.now(), opts0 = {}) {
   const errors = [];
   const clock = sessionByClock(now);
   const used = await creditsUsed(now);
@@ -532,7 +540,8 @@ export async function buildSnapshot(env, now = Date.now()) {
   let ttl5 = TTL.c5[clock];
   if ((clock === 'vorboerse' || clock === 'nachboerse') && !prevHadExt) ttl5 = TTL.c5NoExt[clock];
 
-  const c5P = cached('c5', ttl5, now, errors, guard(async () => {
+  const skipped = Promise.resolve({ data: null, stale: true, savedAt: null });
+  const c5P = opts0.riskOnly ? skipped : cached('c5', ttl5, now, errors, guard(async () => {
     let values;
     if (!prepostRejected) {
       try {
@@ -550,7 +559,7 @@ export async function buildSnapshot(env, now = Date.now()) {
     }
     return values;
   }), opts);
-  const h1P = cached('h1', TTL.h1[clock], now, errors, guard(() => tdSeries(env, now, PROXY, '1h', 60, false)), opts);
+  const h1P = opts0.riskOnly ? skipped : cached('h1', TTL.h1[clock], now, errors, guard(() => tdSeries(env, now, PROXY, '1h', 60, false)), opts);
   const dP = (sym) => cached('d1:' + sym, TTL.d1[clock], now, errors, guard(() => tdSeries(env, now, sym, '1day', 40, false)), opts);
   const vixP = cached('vix', TTL.vix[clock], now, errors, fetchVix, {});
 
@@ -578,6 +587,154 @@ export async function buildSnapshot(env, now = Date.now()) {
   });
 }
 
+// ============================ ATAS-Bruecke ============================
+const ENUM_SESSION = ['regulaer', 'vorboerse', 'nachboerse', 'geschlossen'];
+const ENUM_SIDE = ['Long', 'Short', 'Neutral'];
+const ENUM_CONF = ['hoch', 'mittel', 'niedrig'];
+const ENUM_POS = ['ueber_vortageshoch', 'im_vortagesbereich', 'unter_vortagestief'];
+const LEVEL_KEYS = ['prevHigh', 'prevLow', 'prevClose', 'todayOpen', 'todayHigh', 'todayLow', 'vwap', 'gapPct', 'atrPct14',
+  'rangeTodayPct', 'distPrevHighPct', 'distPrevLowPct', 'distVwapPct'];
+
+class BadBody extends Error {}
+const bad = (msg) => { throw new BadBody(msg); };
+const isObj = (x) => x && typeof x === 'object' && !Array.isArray(x);
+const str = (x, max) => (typeof x === 'string' ? x.slice(0, max) : '');
+const oneOf = (x, list, what) => (list.includes(x) ? x : bad(what));
+function numOrNull(x, what) {
+  if (x === null || x === undefined) return null;
+  return isNum(x) ? x : bad(what);
+}
+function isoOrNull(x) {
+  const t = typeof x === 'string' ? Date.parse(x) : NaN;
+  return Number.isFinite(t) ? new Date(t).toISOString() : null;
+}
+
+// Prueft die Nachricht des Indikators streng und liefert eine bereinigte Kopie (unbekannte Felder entfallen).
+export function validateBridge(b) {
+  if (!isObj(b) || b.v !== 1) bad('v');
+  if (!isObj(b.market) || !isObj(b.bias) || !isObj(b.regime) || !isObj(b.levels)) bad('sections');
+  const m = b.market;
+  if (!isNum(m.lastPrice) || m.lastPrice <= 0) bad('market.lastPrice');
+  const market = { lastPrice: m.lastPrice, lastTime: isoOrNull(m.lastTime), session: oneOf(m.session, ENUM_SESSION, 'market.session') };
+  const bi = b.bias;
+  if (!isNum(bi.score)) bad('bias.score');
+  if (!Array.isArray(bi.factors) || bi.factors.length > 8) bad('bias.factors');
+  const factors = bi.factors.map((f) => {
+    if (!isObj(f)) bad('bias.factors[]');
+    return {
+      key: str(f.key, 16).replace(/[^a-z0-9_]/gi, ''), name: str(f.name, 60),
+      side: oneOf(f.side, ENUM_SIDE, 'factor.side'), detail: str(f.detail, 300),
+    };
+  });
+  const bias = {
+    label: oneOf(bi.label, ENUM_SIDE, 'bias.label'), score: clamp(Math.round(bi.score), -8, 8),
+    confidence: oneOf(bi.confidence, ENUM_CONF, 'bias.confidence'), factors, summary: str(bi.summary, 400),
+  };
+  const r = b.regime;
+  const regime = {
+    label: oneOf(r.label, ['Balance', 'Imbalance'], 'regime.label'),
+    direction: r.direction === null || r.direction === undefined ? null : oneOf(r.direction, ['Long', 'Short'], 'regime.direction'),
+    text: str(r.text, 80), efficiency: numOrNull(r.efficiency, 'regime.efficiency'),
+    timeframe: str(r.timeframe, 80), detail: str(r.detail, 300), since: isoOrNull(r.since),
+  };
+  const lv = b.levels, levels = {};
+  for (const k of LEVEL_KEYS) levels[k] = numOrNull(lv[k], 'levels.' + k);
+  levels.position = lv.position === null || lv.position === undefined ? null : oneOf(lv.position, ENUM_POS, 'levels.position');
+  return {
+    v: 1, instrument: str(b.instrument, 32).replace(/[^A-Za-z0-9 ._\-]/g, ''), timeframe: str(b.timeframe, 16),
+    sentAt: isoOrNull(b.sentAt), market, bias, regime, levels,
+  };
+}
+
+// Zeitkonstanter Vergleich (kein vorzeitiger Abbruch)
+function safeEqual(a, b) {
+  const enc = new TextEncoder();
+  const x = enc.encode(String(a)), y = enc.encode(String(b));
+  let diff = x.length ^ y.length;
+  const n = Math.max(x.length, y.length);
+  for (let i = 0; i < n; i++) diff |= (x[i] || 0) ^ (y[i] || 0);
+  return diff === 0;
+}
+
+async function kvWriteAllowed(env, entry, now) {
+  const meta = await storeGet('bridge:kvmeta');
+  const m = meta && meta.data;
+  const day = new Date(now).toISOString().slice(0, 10);
+  const d = entry.data;
+  const changed = !m || m.bias !== d.bias.label || m.reg !== d.regime.label || m.dir !== d.regime.direction;
+  if (m && !changed && now - meta.savedAt < KV_MIN_INTERVAL_S * 1000) return false;
+  const count = m && m.day === day ? m.count : 0;
+  if (count >= KV_DAILY_CAP) return false;
+  try {
+    await env.BRIDGE.put(KV_KEY, JSON.stringify(entry));
+  } catch (_) { return false; }
+  await storePut('bridge:kvmeta', { savedAt: now, data: { day, count: count + 1, bias: d.bias.label, reg: d.regime.label, dir: d.regime.direction } });
+  return true;
+}
+
+async function ingest(request, env, now) {
+  if (!env || !env.BRIDGE_KEY) return json({ error: 'bridge_not_configured' }, 503);
+  const given = request.headers.get('X-Bridge-Key');
+  if (!given || !safeEqual(given, env.BRIDGE_KEY)) return json({ error: 'unauthorized' }, 401);
+  const len = +request.headers.get('Content-Length');
+  if (Number.isFinite(len) && len > BRIDGE_MAX_BYTES) return json({ error: 'payload_too_large' }, 413);
+  let raw;
+  try { raw = await request.text(); } catch (_) { return json({ error: 'bad_request' }, 400); }
+  if (new TextEncoder().encode(raw).length > BRIDGE_MAX_BYTES) return json({ error: 'payload_too_large' }, 413);
+  let data;
+  try { data = validateBridge(JSON.parse(raw)); } catch (e) {
+    return json({ error: 'invalid_body', message: e instanceof BadBody ? 'Ungültiges Feld: ' + e.message : 'Kein gültiges JSON.' }, 400);
+  }
+  const entry = { savedAt: now, data };
+  await storePut('bridge:latest', entry);
+  let kv = false;
+  if (env.BRIDGE && typeof env.BRIDGE.put === 'function') kv = await kvWriteAllowed(env, entry, now);
+  return json({ ok: true, receivedAt: iso(now), kvWritten: kv }, 200);
+}
+
+async function loadBridge(env, now) {
+  let best = await storeGet('bridge:latest');
+  if (env && env.BRIDGE && typeof env.BRIDGE.get === 'function' && !(best && now - best.savedAt < BRIDGE_FRESH_S * 1000)) {
+    try {
+      const kv = await env.BRIDGE.get(KV_KEY, 'json');
+      if (kv && isNum(kv.savedAt) && (!best || kv.savedAt > best.savedAt)) best = kv;
+    } catch (_) { /* KV optional */ }
+  }
+  return best || null;
+}
+
+function bridgeSnapshot(entry, risk, now) {
+  const d = entry.data;
+  return {
+    version: VERSION, generatedAt: iso(now),
+    market: {
+      proxy: 'NQ', source: 'atas', instrument: d.instrument, session: d.market.session,
+      extendedHours: d.market.session === 'vorboerse' || d.market.session === 'nachboerse',
+      lastPrice: d.market.lastPrice, lastTime: d.market.lastTime || iso(entry.savedAt),
+      ageSeconds: Math.max(0, Math.round((now - entry.savedAt) / 1000)), stale: false,
+    },
+    bias: d.bias, regime: d.regime, levels: d.levels, risk,
+    diagnostics: { twelve: {}, errors: [] },
+  };
+}
+
+export async function buildResponse(env, now = Date.now()) {
+  env = env || {};
+  const entry = await loadBridge(env, now);
+  const ageS = entry ? Math.max(0, Math.round((now - entry.savedAt) / 1000)) : null;
+  const diagBridge = { configured: !!env.BRIDGE_KEY, lastReceivedAgeSeconds: ageS, kv: !!env.BRIDGE };
+  let snap;
+  if (entry && ageS < BRIDGE_FRESH_S) {
+    let risk;
+    try { risk = (await buildSnapshot(env, now, { riskOnly: true })).risk; } catch (_) { risk = null; }
+    snap = bridgeSnapshot(entry, risk || computeRisk({}, null), now);
+  } else {
+    snap = await buildSnapshot(env, now);
+  }
+  snap.diagnostics.bridge = diagBridge;
+  return snap;
+}
+
 // ============================ HTTP ============================
 function corsHeaders(origin) {
   const h = { 'Vary': 'Origin' };
@@ -601,11 +758,19 @@ export async function handle(request, env, now = Date.now()) {
   const origin = request.headers.get('Origin');
   const url = new URL(request.url);
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store', ...corsHeaders(origin) } });
-  if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405, origin);
   const path = url.pathname.replace(/\/+$/, '') || '/';
+  if (path === '/api/v2/ingest') {
+    if (request.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
+    try {
+      return await ingest(request, env || {}, now);
+    } catch (e) {
+      return json({ error: 'internal', message: sanitize(e && e.message, env) }, 500);
+    }
+  }
+  if (request.method !== 'GET') return json({ error: 'method_not_allowed' }, 405, origin);
   if (path === '/api/v2/snapshot') {
     try {
-      return json(await buildSnapshot(env || {}, now), 200, origin);
+      return json(await buildResponse(env || {}, now), 200, origin);
     } catch (e) {
       return json({ error: 'internal', message: sanitize(e && e.message, env) }, 500, origin);
     }
@@ -615,6 +780,7 @@ export async function handle(request, env, now = Date.now()) {
     return json({
       ok: true, version: VERSION, time: iso(now), session: sess, proxy: PROXY,
       secrets: { twelveData: !!(env && env.TWELVEDATA_API_KEY) },
+      bridge: { configured: !!(env && env.BRIDGE_KEY), kv: !!(env && env.BRIDGE) },
       creditsToday: await creditsUsed(now),
     }, 200, origin);
   }
